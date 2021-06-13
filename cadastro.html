@@ -1,67 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastrar</title>
-    <link rel="stylesheet" href="./css/cadastro.css">
-  </head>
-  <body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Cadastrar</title>
+        <link rel="stylesheet" href="./css/cadastro.css" />
+    </head>
+    <body>
+        <form id="cad_prod">
+            <div class="campos">
+                <label for="codigo">Codigo Produto</label>
+                <input type="number" id="codigo" />
+            </div>
 
-    <form id="cad_prod">
-      <div class="campos">
-        <label for="codigo">Codigo Produto</label>
-        <input type="number" id="codigo" />
-      </div>
+            <div class="campos">
+                <label for="nome">Nome Produto </label>
+                <input type="text" id="nome" />
+            </div>
 
-      <div class="campos">
-        <label for="nome">Nome Produto </label>
-        <input type="text" id="nome" />
-      </div>
+            <div class="campos">
+                <label for="unidade">Unidade </label>
+                <input type="text" id="unidade" />
+            </div>
 
-      <div class="campos">
-        <label for="unidade">Unidade </label>
-        <input type="text" id="unidade" />
-      </div>
+            <div class="campos">
+                <label for="quantidade">Quantidade</label>
+                <input type="number" id="quantidade" />
+            </div>
 
-      <div class="campos">
-        <label for="quantidade">Quantidade</label>
-        <input type="number" id="quantidade" />
-      </div>
+            <div class="campos">
+                <label for="codigo_barra">Codigo de Barra</label>
+                <input type="text" id="codigo_barra" />
+            </div>
 
-      <div class="campos">
-        <label for="codigo_barra">Codigo de Barra</label>
-        <input type="text" id="codigo_barra" />
-      </div>
+            <div class="campos">
+                <label for="ativo">Ativo</label>
+                <input type="checkbox" id="ativo" />
+            </div>
+        </form>
 
-      <div class="campos">
-        <label for="ativo">Ativo</label>
-        <input type="checkbox" id="ativo" />
-      </div>
-    </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Codigo</th>
+                    <th>Nome</th>
+                    <th>Unidade</th>
+                    <th>Quantidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="tb_produtos">
+                <!-- Java Script -->
+            </tbody>
+        </table>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Codigo</th>
-          <th>Nome</th>
-          <th>Unidade</th>
-          <th>Quantidade</th>
-          <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tb_produtos">
-        <!-- <tr>
-          <td>1</td>
-          <td>Cerveja</td>
-          <td>Un</td>
-          <td>100</td>
-          <td><input type="button" onclick="" value="Editar"><input type="button" value="Excluir"></td>
-        </tr> -->
-      </tbody>
-    </table>
-    
-    <script src="./js/cadastro.js"></script>
-  </body>
+        <script src="./js/cadastro.js"></script>
+
+    </body>
 </html>

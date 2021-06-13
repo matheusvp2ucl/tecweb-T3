@@ -1,5 +1,12 @@
 class Produto {
-    constructor(codigo, nome, unidade, quantidade, codigo_barra="", ativo=true){
+    constructor(
+        codigo,
+        nome,
+        unidade,
+        quantidade,
+        codigo_barra = "",
+        ativo = true
+    ) {
         this.codigo = codigo;
         this.nome = nome;
         this.unidade = unidade;
@@ -9,7 +16,14 @@ class Produto {
     }
 }
 
-function BaseTabela( produto ){
+class Pessoa{
+    constructor(codigo, nome){
+        this.codigo = codigo
+        this.nome = nome
+    }
+}
+
+function BaseTabela(produto) {
     let { codigo, nome, unidade, quantidade } = produto;
     aux = `<tr>
         <td>${codigo}</td>
@@ -24,26 +38,63 @@ function BaseTabela( produto ){
     return aux;
 }
 
-var ControllerCadastro = {
-    listaProdutos : () => [],
+var controllerDados = {
+    listaProdutos: [],
 
-    atualizarLista : (produto) => {
-        this.listaProdutos.push(produto)
+    getLocalStorage : function(){
+        let bancoLocal = localStorage.getItem("listaProdutos");
+        this.listaProdutos = JSON.parse(bancoLocal);
+        return this.listaProdutos;
     },
 
-    atualizarTabela : () => {
+    setLocalStorage : () => {
+        localStorage.setItem(
+            "listaProdutos",
+            JSON.stringify(this.listaProdutos)
+        );
+    },
+
+    Get_Produto: (codigo) => {
+        this.getLocalStorage();
+        return this.listaProdutos.filter( elemento =>  elemnto.codigo == codigo );
+    },
+
+    Get_Produtos: () => {
+        this.getLocalStorage();
+        return this.listaProdutos;
+    },
+
+    Post_Produto: (produto) => {
+        this.getLocalStorage();
+        if (this.listaProdutos.length == 0) produto.codigo = 1;
+        else produto.codigo = this.listaProdutos[this.listaProdutos.length - 1].codigo + 1;
+        this.listaProdutos.push(produto);
+        this.setLocalStorage();
+    },
+
+    Update_Produto: (produto) => {
+        this.getLocalStorage();
+        let index = this.listaProdutos.findIndex( elemento => elemento.codigo == produto.codigo );
+        this.listaProdutos[index] = produto;
+        this.setLocalStorage();
+    },
+
+
+
+    Atualiza_Tabela: () => {
         let tb_produtos = document.getElementById("tb_produtos");
         aux = "";
-        this.listaProdutos.forEach(produto => {
+        this.listaProdutos.forEach((produto) => {
             aux += BaseTabela(produto);
         });
         tb_produtos.innerHTML = aux;
     },
 
-    mostrar : () => {
+    mostrar: () => {
         console.log(this.listaProdutos);
-    }
-}
+    },
+};
 
-// ControllerCadastro.atualizarLista(new Produto(1, "Coca Cola", "Lata", 20))
-ControllerCadastro.mostrar()
+
+
+controllerDados.Post_Produto(new Produto("", "Coca Cola", "Lata", 20))
