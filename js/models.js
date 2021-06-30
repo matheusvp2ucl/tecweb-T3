@@ -24,7 +24,8 @@ class Compra {
         quantidade,
         codigo_barra,
         ativo,
-        quantidade_comprada
+        quantidade_comprada,
+        coletado
     ){
         this.codigo = codigo;
         this.nome = nome;
@@ -33,5 +34,6 @@ class Compra {
         this.codigo_barra = codigo_barra;
         this.ativo = ativo;
         this.quantidade_comprada = quantidade_comprada;
+        this.coletado = coletado;
     }
 }

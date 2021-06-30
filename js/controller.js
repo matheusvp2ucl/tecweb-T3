@@ -27,11 +27,28 @@ var cCompras = {
 
     buttonAtivado: function(ok){
         const ell = document.getElementById("btn_enviar");
-        if(ok){
+        if(!ok){
             ell.disabled = true;
         }else{
             ell.disabled = false;
         }
+    },
+
+    verificaColetados: function(){
+        const compras = this.getlistaCompras();
+        const quantidadeColetado = compras.filter(prod => prod.coletado == true).length;
+        if(compras.length == quantidadeColetado){
+            this.buttonAtivado(true);
+        }else{
+            this.buttonAtivado(false);
+        }
+    },
+
+    coletaProduto: function(codigo, coleta){
+        this.getlistaCompras();
+        let index = this.listaCompras.findIndex(p => { return p.codigo == codigo })
+        this.listaCompras[index].coletado = coleta
+        this.setlistaCompras();
     },
 
     pegaProduto: function(codigo){
@@ -42,19 +59,28 @@ var cCompras = {
         let ell_prod_qtd = document.getElementById(`prod-qtd-${codigo}`);
         let ell_prod_get_qtd = document.getElementById(`prod-get-qtd-${codigo}`);
 
+
+
         if(parseFloat(ell_prod_get_qtd.value) >= parseFloat(ell_prod_qtd.value)){
             this.riscaPalavra(ell_cod, true);
             this.riscaPalavra(ell_prod, true);
             this.riscaPalavra(ell_uni, true);
+            this.coletaProduto(codigo, true);
         }else{
             this.riscaPalavra(ell_cod, false);
             this.riscaPalavra(ell_prod, false);
             this.riscaPalavra(ell_uni, false);
+            this.coletaProduto(codigo, false);
         }
+
+        this.salvaQuantidadeComprada(codigo, parseFloat(ell_prod_get_qtd.value));
+
+        this.verificaColetados();
 
     },
 
     atualizaTabelaCompras: function(){
+        this.atualizaAtivosCompras();
         this.atualizaListaCompras();
         const prodAtivos = this.getlistaCompras();
         let aux = "";
@@ -86,12 +112,88 @@ var cCompras = {
                     produto.quantidade,
                     produto.codigo_barra,
                     produto.ativo,
-                    0
+                    0,
+                    false
                 ));
             }
         }
         this.listaCompras = baseLista;
         this.setlistaCompras();
+    },
+
+    atualizaAtivosCompras: function(){
+        const atual = this.getlistaCompras();
+        const ativos = cProduto.getProdutosAtivos();
+        let baseCompras = [];
+
+        for(let i=0; i<atual.length; i++){
+            let prod = atual[i];
+            let isExists = ativos.find( produto => produto.codigo == prod.codigo);
+            if(isExists){
+                baseCompras.push(prod);
+            }
+        }
+        this.listaCompras = baseCompras;
+        this.setlistaCompras();
+    },
+
+    salvaQuantidadeComprada: function(codigo, qtd_compra){
+        this.getlistaCompras();
+        let index = this.listaCompras.findIndex(p => { return p.codigo == codigo })
+        this.listaCompras[index].quantidade_comprada = qtd_compra
+        this.setlistaCompras();
+    },
+
+    enviarCompra: async function(){
+
+        // Enviar para API
+        const primeiro = await cMockApi.enviarDataCompra();
+
+        const compras = this.getlistaCompras();
+
+        for(let i=0 ; i < compras.length ; i++ ){
+            let produto = compras[i];
+            const dataProduto = this.baseRetornoApi(produto);
+            await cMockApi.enviarCompras(primeiro.CodCompras, dataProduto);
+        }
+
+        await Swal.fire("Enviados com Sucesso!", "Resetando Lista de Compras" , "success");
+
+        this.listaCompras = [];
+        this.setlistaCompras();
+        this.atualizaTabelaCompras();
+    },
+
+    baseRetornoApi: function(produto){
+        return {
+            cdProduto: produto.codigo,
+            Nome: produto.nome,
+            Unidade: produto.unidade,
+            Quantidade: produto.quantidade,
+            CodigoBarra: produto.codigo_barra,
+            Ativo: produto.ativo,
+            QuantComprada: produto.quantidade_comprada
+        }
+    }
+
+}
+
+var cMockApi = {
+
+    endpoint_api: "https://60da4ff75f7bf10017547a7a.mockapi.io/ap1/v1",
+
+    enviarDataCompra: async function(){
+        const resp = await fetch( this.endpoint_api + "/Compras", { method: "POST" });
+        return resp.json();
+    },
+
+    enviarCompras: async function(CodCompra, data){
+        const resp = await fetch( this.endpoint_api + `/Compras/${CodCompra}/produtos`, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        return resp.json();
     }
 
 }
