@@ -44,7 +44,6 @@ var controller = {
         if (index >= 0){
             this.listaUsuarios.splice(index,1);
         }
-        console.log(this.listaUsuarios);
         this.setlistaUsuarios();
     }
 }
