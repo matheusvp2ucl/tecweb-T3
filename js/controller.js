@@ -303,7 +303,7 @@ var cProduto = {
             this.listaProdutos.splice(index,1);
         }
         this.setlistaProdutos();
-        await Swal.fire("Excluido com Sucesso!", "Produto " + produto.nome , "success");
+        alert(`${produto.nome} foi excluido com sucesso!`)
         this.atualizaTablaProdutos();
     },
 

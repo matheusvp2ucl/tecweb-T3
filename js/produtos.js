@@ -1,7 +1,6 @@
 const btn_cadastro = document.getElementById("btn_cadastro");
 const btn_salvar = document.getElementById("btn_salvar");
 const md_produto = new bootstrap.Modal(document.getElementById("md_cadastro"));
-const Swal = 
 
 cProduto.atualizaTablaProdutos();
 
